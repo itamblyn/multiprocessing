@@ -15,17 +15,19 @@ def counter(seed):
 
 # measure the time it takes to complete tasks one at a time using standard techinques
 toc = time.time()
-for i in range(2):
+ntask=2
+for i in range(ntask):
     average = counter(i)
 tic = time.time()
+print 'using ', 1, ' process to complete ', str(ntask), 'tasks'
 print tic-toc, ' seconds'
 
 print 'now lets create a lot of tasks, and throw cores at it (i.e. without HT)'
 
 tic = time.time()
-seeds = np.arange(40)
+seeds = np.arange(multiprocessing.cpu_count())
 pool = Pool(processes=multiprocessing.cpu_count()/2)
-print 'using ', multiprocessing.cpu_count()/2, ' processes'
+print 'using ', multiprocessing.cpu_count()/2, ' processes to complete ', multiprocessing.cpu_count(), 'tasks'
 tic = time.time()
 run = pool.map(counter, seeds)
 toc = time.time()
@@ -34,9 +36,9 @@ print toc-tic, ' seconds'
 print 'lets see how HT helps'
 
 tic = time.time()
-seeds = np.arange(40)
+seeds = np.arange(multiprocessing.cpu_count())
 pool = Pool(processes=multiprocessing.cpu_count())
-print 'using ', multiprocessing.cpu_count(), ' processes'
+print 'using ', multiprocessing.cpu_count(), ' processes to complete ', multiprocessing.cpu_count(), 'tasks'
 tic = time.time()
 run = pool.map(counter, seeds)
 toc = time.time()
